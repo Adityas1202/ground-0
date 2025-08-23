@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .dashboard-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .dashboard-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .dashboard-actions button {
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .dashboard-actions button:hover {
+            background: var(--secondary);
+        }
+        .appointment-form {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .appointment-list {
+            margin-top: 20px;
+        }
+        .appointment-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+        }
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">MedConnect</div>
+            <p class="tagline">Patient Dashboard</p>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </header>
+        
+        <div class="dashboard">
+            <div class="dashboard-section">
+                <h2>Welcome, <span id="userName"></span>!</h2>
+                <p>Email: <span id="userEmail"></span></p>
+            </div>
+
+            <div class="dashboard-section">
+                <h3>Quick Actions</h3>
+                <div class="dashboard-actions">
+                    <button onclick="showBookAppointment()">Book Appointment</button>
+                    <button onclick="showMyAppointments()">My Appointments</button>
+                    <button onclick="findDoctors()">Find Doctors</button>
+                    <button onclick="showProfile()">My Profile</button>
+                </div>
+            </div>
+
+            <div id="contentArea" class="dashboard-section">
+                <h3>Welcome to Your Dashboard</h3>
+                <p>Select an action from the menu above to get started.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || user.userType !== 'patient') {
+            window.location.href = 'patient-signin.html';
+        } else {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+        }
+
+        async function showBookAppointment() {
+            try {
+                const response = await fetch('http://localhost:3000/api/doctors');
+                const doctors = await response.json();
+                
+                const doctorsOptions = doctors.map(doctor => 
+                    `<option value="${doctor.id}">Dr. ${doctor.name} - ${doctor.specialty}</option>`
+                ).join('');
+                
+                document.getElementById('contentArea').innerHTML = `
+                    <h3>Book New Appointment</h3>
+                    <form id="appointmentForm" class="appointment-form">
+                        <div>
+                            <label>Select Doctor:</label>
+                            <select id="doctorSelect" required>
+                                <option value="">Choose a doctor</option>
+                                ${doctorsOptions}
+                            </select>
+                        </div>
+                        <div>
+                            <label>Date:</label>
+                            <input type="date" id="appointmentDate" required>
+                        </div>
+                        <div>
+                            <label>Time:</label>
+                            <input type="time" id="appointmentTime" required>
+                        </div>
+                        <div>
+                            <label>Reason:</label>
+                            <textarea id="appointmentReason" placeholder="Brief reason for appointment"></textarea>
+                        </div>
+                        <button type="submit">Schedule Appointment</button>
+                    </form>
+                `;
+                
+                document.getElementById('appointmentForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await scheduleAppointment();
+                });
+            } catch (error) {
+                console.error('Error loading doctors:', error);
+                alert('Error loading doctors. Please try again.');
+            }
+        }
+
+        async function scheduleAppointment() {
+            try {
+                const doctorId = document.getElementById('doctorSelect').value;
+                const date = document.getElementById('appointmentDate').value;
+                const time = document.getElementById('appointmentTime').value;
+                const reason = document.getElementById('appointmentReason').value;
+                
+                const response = await fetch('http://localhost:3000/api/appointments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        patientId: user.id,
+                        doctorId: parseInt(doctorId),
+                        date,
+                        time,
+                        reason
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Appointment scheduled successfully!');
+                    showMyAppointments();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error scheduling appointment:', error);
+                alert('Error scheduling appointment. Please try again.');
+            }
+        }
+
+        async function showMyAppointments() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/patients/${user.id}/appointments`);
+                const appointments = await response.json();
+                
+                if (appointments.length === 0) {
+                    document.getElementById('contentArea').innerHTML = `
+                        <h3>My Appointments</h3>
+                        <p>You don't have any appointments yet.</p>
+                    `;
+                    return;
+                }
+                
+                const appointmentsHtml = appointments.map(appt => `
+                    <div class="appointment-card">
+                        <h4>Appointment with Dr. ${appt.doctorName}</h4>
+                        <p><strong>Date:</strong> ${appt.date}</p>
+                        <p><strong>Time:</strong> ${appt.time}</p>
+                        <p><strong>Reason:</strong> ${appt.reason}</p>
+                        <p><strong>Status:</strong> ${appt.status}</p>
+                    </div>
+                `).join('');
+                
+                document.getElementById('contentArea').innerHTML = `
+                    <h3>My Appointments</h3>
+                    <div class="appointment-list">
+                        ${appointmentsHtml}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading appointments:', error);
+                alert('Error loading appointments. Please try again.');
+            }
+        }
+
+        async function findDoctors() {
+            try {
+                const response = await fetch('http://localhost:3000/api/doctors');
+                const doctors = await response.json();
+                
+                const doctorsHtml = doctors.map(doctor => `
+                    <div class="appointment-card">
+                        <h4>Dr. ${doctor.name}</h4>
+                        <p><strong>Specialty:</strong> ${doctor.specialty}</p>
+                        <p><strong>Hospital:</strong> ${doctor.hospital}</p>
+                        <p><strong>License:</strong> ${doctor.license}</p>
+                    </div>
+                `).join('');
+                
+                document.getElementById('contentArea').innerHTML = `
+                    <h3>Available Doctors</h3>
+                    <div class="appointment-list">
+                        ${doctorsHtml}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading doctors:', error);
+                alert('Error loading doctors. Please try again.');
+            }
+        }
+
+        function showProfile() {
+            document.getElementById('contentArea').innerHTML = `
+                <h3>My Profile</h3>
+                <p><strong>Name:</strong> ${user.name}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>User Type:</strong> Patient</p>
+            `;
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
