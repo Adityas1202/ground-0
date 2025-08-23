@@ -1,247 +1,108 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Check which page we're on
-    const isDoctorPage = document.body.classList.contains('doctor-portal');
-    const isPatientPage = document.body.classList.contains('patient-portal');
-    const isHomePage = !isDoctorPage && !isPatientPage;
-    
-    // Base API URL
-    const API_BASE = 'http://localhost:3000/api';
-    
-    if (isHomePage) {
-        // Home page functionality
-        const patientRole = document.getElementById('patientRole');
-        const doctorRole = document.getElementById('doctorRole');
-        
-        if (patientRole && doctorRole) {
-            patientRole.addEventListener('click', function() {
-                window.location.href = 'patient-signin.html';
-            });
-            
-            doctorRole.addEventListener('click', function() {
-                window.location.href = 'doctor-signin.html';
-            });
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("MedSupport site loaded.");
+
+  const heroHeading = document.querySelector(".hero-text h2");
+  const heroPara = document.querySelector(".hero-text p");
+  if (!heroHeading) return;
+
+  // Smooth text update with fade transition
+  const setText = (text) => {
+    heroHeading.classList.remove("fade-in");
+    heroHeading.classList.add("fade-out");
+
+    setTimeout(() => {
+      heroHeading.textContent = text;
+      if (heroPara) heroPara.textContent = ""; // clear subtext
+      heroHeading.classList.remove("fade-out");
+      heroHeading.classList.add("fade-in");
+    }, 500);
+  };
+
+  // Local fallback lines
+  const localHealthLines = [
+    "Health is the greatest wealth.",
+    "A healthy outside starts from the inside.",
+    "Small daily habits compound into lifelong health.",
+    "Sleep, movement, sunlight, hydration — your daily multivitamin.",
+    "Take care of your body; it’s the only place you have to live. — Jim Rohn",
+    "Your future self is built by today’s choices.",
+    "Move more, stress less, eat real food.",
+    "Make rest part of the plan, not an afterthought."
+  ];
+
+  // Quote fetching
+  async function fetchQuote() {
+    try {
+      const res = await fetch("https://api.quotable.io/random?tags=health", { cache: "no-store" });
+      if (!res.ok) throw new Error("health tag not ok");
+      const data = await res.json();
+      if (data?.content) {
+        setText(`${data.content} — ${data.author ?? "Unknown"}`);
+        return;
+      }
+      throw new Error("no content from health tag");
+    } catch {
+      try {
+        const res2 = await fetch("https://api.quotable.io/random?tags=inspirational|life", { cache: "no-store" });
+        if (!res2.ok) throw new Error("general tags not ok");
+        const data2 = await res2.json();
+        if (data2?.content) {
+          setText(`${data2.content} — ${data2.author ?? "Unknown"}`);
+          return;
         }
+        throw new Error("no content from general tags");
+      } catch {
+        // Final fallback: local list
+        const random = localHealthLines[Math.floor(Math.random() * localHealthLines.length)];
+        setText(random);
+        console.warn("Using local fallback health line.");
+      }
     }
-    
-    if (isDoctorPage || isPatientPage) {
-        // Form functionality for doctor and patient pages
-        initializeAuthForms(isDoctorPage, API_BASE);
-    }
-    
-    function showNotification(message, type) {
-        const notification = document.getElementById('notification');
-        if (notification) {
-            notification.textContent = message;
-            notification.className = 'notification ' + type;
-            
-            setTimeout(() => {
-                notification.className = 'notification';
-            }, 3000);
-        } else {
-            console.log(`${type.toUpperCase()}: ${message}`);
-        }
-    }
-    
-    function initializeAuthForms(isDoctorPage, API_BASE) {
-        let signupForm, loginForm, toLoginLink, toSignupLink;
-        
-        if (isDoctorPage) {
-            signupForm = document.getElementById('doctorSignupForm');
-            loginForm = document.getElementById('doctorLoginForm');
-            toLoginLink = document.getElementById('doctorToLogin');
-            toSignupLink = document.getElementById('doctorToSignup');
-        } else {
-            signupForm = document.getElementById('patientSignupForm');
-            loginForm = document.getElementById('patientLoginForm');
-            toLoginLink = document.getElementById('patientToLogin');
-            toSignupLink = document.getElementById('patientToSignup');
-        }
-        
-        // Switch between signup and login forms
-        if (toLoginLink && toSignupLink && signupForm && loginForm) {
-            toLoginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                signupForm.classList.remove('active');
-                loginForm.classList.add('active');
-            });
-            
-            toSignupLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                loginForm.classList.remove('active');
-                signupForm.classList.add('active');
-            });
-        }
-        
-        // Form submissions
-        if (isDoctorPage) {
-            if (signupForm) signupForm.addEventListener('submit', (e) => handleDoctorSignup(e, API_BASE));
-            if (loginForm) loginForm.addEventListener('submit', (e) => handleDoctorLogin(e, API_BASE));
-        } else {
-            if (signupForm) signupForm.addEventListener('submit', (e) => handlePatientSignup(e, API_BASE));
-            if (loginForm) loginForm.addEventListener('submit', (e) => handlePatientLogin(e, API_BASE));
-        }
-    }
-    
-    async function handlePatientSignup(e, API_BASE) {
-        e.preventDefault();
-        
-        const formData = {
-            name: document.getElementById('patientName').value,
-            email: document.getElementById('patientEmail').value,
-            password: document.getElementById('patientPassword').value,
-            dob: document.getElementById('patientDob').value,
-            phone: document.getElementById('patientPhone').value
-        };
-        
-        try {
-            showNotification('Creating account...', 'success');
-            
-            const response = await fetch(`${API_BASE}/auth/patients/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                showNotification('Account created successfully!', 'success');
-                // Store user data
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', data.token);
-                // Redirect to patient dashboard
-                setTimeout(() => {
-                    window.location.href = 'patient-dashboard.html';
-                }, 1500);
-            } else {
-                showNotification(data.message || 'Error creating account', 'error');
-            }
-        } catch (error) {
-            console.error('Signup error:', error);
-            showNotification('Network error. Please try again.', 'error');
-        }
-    }
-    
-    async function handlePatientLogin(e, API_BASE) {
-        e.preventDefault();
-        
-        const formData = {
-            email: document.getElementById('patientLoginEmail').value,
-            password: document.getElementById('patientLoginPassword').value
-        };
-        
-        try {
-            showNotification('Logging in...', 'success');
-            
-            const response = await fetch(`${API_BASE}/auth/patients/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                showNotification('Login successful!', 'success');
-                // Store user data
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', data.token);
-                // Redirect to patient dashboard
-                setTimeout(() => {
-                    window.location.href = 'patient-dashboard.html';
-                }, 1500);
-            } else {
-                showNotification(data.message || 'Invalid credentials', 'error');
-            }
-        } catch (error) {
-            console.error('Login error:', error);
-            showNotification('Network error. Please try again.', 'error');
-        }
-    }
-    
-    async function handleDoctorSignup(e, API_BASE) {
-        e.preventDefault();
-        
-        const formData = {
-            name: document.getElementById('doctorName').value,
-            email: document.getElementById('doctorEmail').value,
-            password: document.getElementById('doctorPassword').value,
-            license: document.getElementById('doctorLicense').value,
-            specialty: document.getElementById('doctorSpecialty').value,
-            hospital: document.getElementById('doctorHospital').value
-        };
-        
-        try {
-            showNotification('Creating account...', 'success');
-            
-            const response = await fetch(`${API_BASE}/auth/doctors/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                showNotification('Account created successfully!', 'success');
-                // Store user data
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', data.token);
-                // Redirect to doctor dashboard
-                setTimeout(() => {
-                    window.location.href = 'doctor-dashboard.html';
-                }, 1500);
-            } else {
-                showNotification(data.message || 'Error creating account', 'error');
-            }
-        } catch (error) {
-            console.error('Signup error:', error);
-            showNotification('Network error. Please try again.', 'error');
-        }
-    }
-    
-    async function handleDoctorLogin(e, API_BASE) {
-        e.preventDefault();
-        
-        const formData = {
-            email: document.getElementById('doctorLoginEmail').value,
-            password: document.getElementById('doctorLoginPassword').value
-        };
-        
-        try {
-            showNotification('Logging in...', 'success');
-            
-            const response = await fetch(`${API_BASE}/auth/doctors/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-                showNotification('Login successful!', 'success');
-                // Store user data
-                localStorage.setItem('user', JSON.stringify(data.user));
-                localStorage.setItem('token', data.token);
-                // Redirect to doctor dashboard
-                setTimeout(() => {
-                    window.location.href = 'doctor-dashboard.html';
-                }, 1500);
-            } else {
-                showNotification(data.message || 'Invalid credentials', 'error');
-            }
-        } catch (error) {
-            console.error('Login error:', error);
-            showNotification('Network error. Please try again.', 'error');
-        }
-    }
+  }
+
+  // First quote + interval refresh
+  fetchQuote();
+  setInterval(fetchQuote, 10000);
+
+  // === Background slideshow ===
+  const bgContainer = document.querySelector(".background-slideshow");
+  if (bgContainer) {
+    const bgImages = [
+      "https://img.freepik.com/free-photo/medical-banner-with-doctor-wearing-gloves_23-2149611206.jpg",
+      "https://img.freepik.com/free-photo/healthcare-concept-with-hands-holding-stethoscope_23-2149241269.jpg",
+      "https://img.freepik.com/free-photo/medical-banner-with-stethoscope_23-2149611195.jpg"
+    ];
+
+    let bgIndex = 0;
+    bgImages.forEach((src, i) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.loading = "lazy";
+      if (i === 0) img.classList.add("active");
+      bgContainer.appendChild(img);
+    });
+
+    const bgSlides = bgContainer.querySelectorAll("img");
+    setInterval(() => {
+      bgSlides[bgIndex].classList.remove("active");
+      bgIndex = (bgIndex + 1) % bgSlides.length;
+      bgSlides[bgIndex].classList.add("active");
+    }, 4000);
+  }
+
+  // === Dropdown menu ===
+  const dropBtn = document.querySelector(".dropbtn");
+  const dropdownContent = document.querySelector(".dropdown-content");
+  if (dropBtn && dropdownContent) {
+    dropBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      dropdownContent.classList.toggle("show");
+    });
+
+    window.addEventListener("click", (e) => {
+      if (!e.target.matches(".dropbtn")) {
+        dropdownContent.classList.remove("show");
+      }
+    });
+  }
 });
