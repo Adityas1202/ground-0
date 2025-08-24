@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointments - MediEase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>MediEase</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="test-booking.html">Book a Test</a></li>
+            <li><a href="appointments.html" class="active">Appointments</a></li>
+            <li><a href="other-services.html">Other Services</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+    <h2>Book a Doctor Appointment</h2>
+    <form id="appointmentForm">
+        <label for="patient">Patient Name:</label>
+        <input type="text" id="patient" required>
+
+        <label for="specialty">Specialty:</label>
+        <select id="specialty">
+            <option>General Physician</option>
+            <option>Dermatologist</option>
+            <option>Pediatrician</option>
+        </select>
+
+        <label for="datetime">Date & Time:</label>
+        <input type="datetime-local" id="datetime" required>
+
+        <button type="submit">Book Appointment</button>
+    </form>
+</main>
+
+<footer>
+    <p>&copy; 2025 MediEase. All rights reserved.</p>
+</footer>
+
+<script src="database.js"></script>
+<script>
+    // Initialize database when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        Database.init();
+        
+        const form = document.getElementById('appointmentForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const appointment = {
+                patient: document.getElementById('patient').value,
+                specialty: document.getElementById('specialty').value,
+                datetime: document.getElementById('datetime').value
+            };
+            
+            Database.addAppointment(appointment);
+            alert('Appointment saved successfully!');
+            form.reset();
+        });
+    });
+</script>
+</body>
+</html>
