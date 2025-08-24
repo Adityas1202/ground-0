@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.ico">
+    <title>Data Manager - MediEase</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .data-manager {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .data-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .data-section h3 {
+            color: #0f62fe;
+            margin-top: 0;
+        }
+        .data-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .data-item:last-child {
+            border-bottom: none;
+        }
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>MediEase</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="test-booking.html">Book a Test</a></li>
+            <li><a href="appointments.html">Appointments</a></li>
+            <li><a href="other-services.html">Other Services</a></li>
+            <li><a href="data-manager.html" class="active">Data Manager</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="data-manager">
+    <h2>Data Manager</h2>
+    
+    <div class="action-buttons">
+        <button onclick="downloadData()" class="btn">Download All Data</button>
+        <button onclick="clearAllData()" class="btn">Clear All Data</button>
+        <button onclick="loadSampleData()" class="btn">Load Sample Data</button>
+    </div>
+    
+    <div class="data-section">
+        <h3>Test Bookings</h3>
+        <div id="testBookingsList">
+            <!-- Test bookings will be displayed here -->
+        </div>
+    </div>
+    
+    <div class="data-section">
+        <h3>Appointments</h3>
+        <div id="appointmentsList">
+            <!-- Appointments will be displayed here -->
+        </div>
+    </div>
+    
+    <div class="data-section">
+        <h3>Service Requests</h3>
+        <div id="servicesList">
+            <!-- Services will be displayed here -->
+        </div>
+    </div>
+    
+    <div class="data-section">
+        <h3>Raw Data</h3>
+        <pre id="rawData">Loading data...</pre>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 MediEase. All rights reserved.</p>
+</footer>
+
+<script src="database.js"></script>
+<script>
+    // Initialize database when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        Database.init();
+        displayAllData();
+    });
+    
+    // Display all data
+    function displayAllData() {
+        displayTestBookings();
+        displayAppointments();
+        displayServices();
+        displayRawData();
+    }
+    
+    // Display test bookings
+    function displayTestBookings() {
+        const testBookings = Database.getTestBookings();
+        const container = document.getElementById('testBookingsList');
+        
+        if (testBookings.length === 0) {
+            container.innerHTML = '<p>No test bookings found.</p>';
+            return;
+        }
+        
+        let html = '';
+        testBookings.forEach(booking => {
+            html += `
+                <div class="data-item">
+                    <strong>${booking.name}</strong> - ${booking.test} on ${booking.date}
+                    <br><small>Location: ${booking.location}</small>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // Display appointments
+    function displayAppointments() {
+        const appointments = Database.getAppointments();
+        const container = document.getElementById('appointmentsList');
+        
+        if (appointments.length === 0) {
+            container.innerHTML = '<p>No appointments found.</p>';
+            return;
+        }
+        
+        let html = '';
+        appointments.forEach(appointment => {
+            html += `
+                <div class="data-item">
+                    <strong>${appointment.patient}</strong> - ${appointment.specialty} at ${appointment.datetime}
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // Display services
+    function displayServices() {
+        const services = Database.getServices();
+        const container = document.getElementById('servicesList');
+        
+        if (services.length === 0) {
+            container.innerHTML = '<p>No service requests found.</p>';
+            return;
+        }
+        
+        let html = '';
+        services.forEach(service => {
+            html += `
+                <div class="data-item">
+                    <strong>${service.service}</strong>
+                    <br><small>Details: ${service.details || 'None'}</small>
+                    <br><small>Contact: ${service.contact}</small>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // Display raw data
+    function displayRawData() {
+        const data = Database.exportData();
+        document.getElementById('rawData').textContent = JSON.stringify(data, null, 2);
+    }
+    
+    // Download data
+    function downloadData() {
+        if (Database.downloadData()) {
+            alert('Data downloaded successfully!');
+        }
+    }
+    
+    // Clear all data
+    function clearAllData() {
+        if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+            Database.clearAll();
+            displayAllData();
+            alert('All data has been cleared.');
+        }
+    }
+    
+    // Load sample data
+    function loadSampleData() {
+        // Add sample test booking
+        Database.addTestBooking({
+            name: "John Doe",
+            location: "New York",
+            test: "Blood Test",
+            date: "2025-03-15"
+        });
+        
+        // Add sample appointment
+        Database.addAppointment({
+            patient: "Jane Smith",
+            specialty: "Dermatologist",
+            datetime: "2025-03-20T10:30"
+        });
+        
+        // Add sample service
+        Database.addService({
+            service: "Home Sample Collection",
+            details: "Requested for blood test",
+            contact: "jane.smith@example.com"
+        });
+        
+        displayAllData();
+        alert('Sample data loaded successfully!');
+    }
+</script>
+</body>
+</html>

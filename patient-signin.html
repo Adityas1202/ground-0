@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Portal - MedConnect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="patient-portal">
+    <div class="container">
+        <header>
+            <div class="logo">MediEase</div>
+            <p class="tagline">Patient Portal</p>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </header>
+
+        <div class="form-container">
+            <!-- Patient Sign Up Form -->
+            <form id="patientSignupForm" class="form">
+                <h2>Patient Registration</h2>
+                <div class="form-group">
+                    <label for="patientName">Full Name</label>
+                    <input type="text" id="patientName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientEmail">Email</label>
+                    <input type="email" id="patientEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientPassword">Password</label>
+                    <input type="password" id="patientPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientDob">Date of Birth</label>
+                    <input type="date" id="patientDob" name="dob" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientPhone">Phone Number</label>
+                    <input type="tel" id="patientPhone" name="phone" required>
+                </div>
+                <button type="submit" class="submit-btn">Register</button>
+                <p class="form-switch">Already have an account? <a href="#" id="patientToLogin">Sign In</a></p>
+            </form>
+
+            <!-- Patient Sign In Form -->
+            <form id="patientLoginForm" class="form active">
+                <h2>Patient Sign In</h2>
+                <div class="form-group">
+                    <label for="patientLoginEmail">Email</label>
+                    <input type="email" id="patientLoginEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="patientLoginPassword">Password</label>
+                    <input type="password" id="patientLoginPassword" name="password" required>
+                </div>
+                <button type="submit" class="submit-btn">Sign In</button>
+                <p class="form-switch">Don't have an account? <a href="#" id="patientToSignup">Register</a></p>
+            </form>
+        </div>
+
+        <div class="notification" id="notification"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

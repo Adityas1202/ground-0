@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.ico">
+    <title>Other Services - MediEase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>MediEase</h1>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="test-booking.html">Book a Test</a></li>
+            <li><a href="appointments.html">Appointments</a></li>
+            <li><a href="other-services.html" class="active">Other Services</a></li>
+            <li><a href="data-manager.html">Data Manager</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+    <h2>Additional Healthcare Services</h2>
+    <ul>
+        <li>Home Sample Collection</li>
+        <li>Medical Insurance Support</li>
+        <li>24/7 Ambulance Booking</li>
+        <li>Online Consultation</li>
+    </ul>
+    
+    <h3>Request a Service</h3>
+    <form id="serviceForm">
+        <label for="service">Select Service:</label>
+        <select id="service" required>
+            <option value="Home Sample Collection">Home Sample Collection</option>
+            <option value="Medical Insurance Support">Medical Insurance Support</option>
+            <option value="24/7 Ambulance Booking">24/7 Ambulance Booking</option>
+            <option value="Online Consultation">Online Consultation</option>
+        </select>
+        
+        <label for="details">Additional Details:</label>
+        <textarea id="details" rows="4" placeholder="Please provide any additional information"></textarea>
+        
+        <label for="contact">Contact Info:</label>
+        <input type="text" id="contact" placeholder="Phone or Email" required>
+        
+        <button type="submit">Submit Request</button>
+    </form>
+</main>
+
+<footer>
+    <p>&copy; 2025 MediEase. All rights reserved.</p>
+</footer>
+
+<script src="database.js"></script>
+<script>
+    // Initialize database when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        Database.init();
+        
+        const form = document.getElementById('serviceForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const service = {
+                service: document.getElementById('service').value,
+                details: document.getElementById('details').value,
+                contact: document.getElementById('contact').value
+            };
+            
+            Database.addService(service);
+            alert('Service request submitted successfully!');
+            form.reset();
+        });
+    });
+</script>
+</body>
+</html>

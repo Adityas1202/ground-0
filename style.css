@@ -1,0 +1,657 @@
+/* Reset and Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f8fb;
+    color: #222;
+    line-height: 1.6;
+}
+
+/* Header and Navigation */
+header {
+    background-color: /*linear-gradient(to right, #0f62fe, #4589ff); */ #0077b6;
+    padding: 20px 40px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+nav a:hover,
+nav a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.hero img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    opacity: 0%;
+    filter: brightness(70%);
+}
+
+.hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hero-text h2 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+}
+
+/* Feature Cards */
+.features {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 60px auto;
+    gap: 30px;
+    padding: 0 20px;
+    max-width: 1200px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    flex: 1 1 300px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #0f62fe;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Buttons */
+.btn, button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(to right, #0f62fe, #4589ff);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.btn:hover, button:hover {
+    background: linear-gradient(to right, #0353e9, #357aff);
+    transform: translateY(-2px);
+}
+
+/* Forms */
+form {
+    max-width: 500px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+form label {
+    font-weight: 600;
+    color: #333;
+}
+
+form input, form select {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
+
+form input:focus, form select:focus {
+    border-color: #0f62fe;
+    outline: none;
+}
+
+/* Content Pages */
+.content {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.content h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #0f62fe;
+}
+
+.content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.content ul li {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #444;
+}
+
+/* Footer */
+footer {
+    background-color: #0077b6;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 60px;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header {
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero-text h2 {
+        font-size: 2rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+    }
+}
+/* ===== Hero Text Transition ===== */
+.hero-text h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #b5cae0;
+  transition: opacity 1s ease, transform 1s ease;
+  opacity: 1;
+}
+
+/* Hidden state (before fade-in) */
+.fade-out {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Visible state (fade-in) */
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Background Slideshow ===== */
+.background-slideshow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.background-slideshow img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.background-slideshow img.active {
+  opacity: 0.5;
+}
+
+/* ===== Top Right Options ===== */
+.top-right-options {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  gap: 15px;
+}
+
+.top-right-options a {
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+/* Emergency button (red) */
+.btn-emergency {
+  background-color: #e60000;
+  color: #fff;
+}
+.btn-emergency:hover {
+  background-color: #b30000;
+}
+
+/* Log In + Register buttons (white with border) */
+.btn-login,
+.btn-register {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+.btn-login:hover,
+.btn-register:hover {
+  background-color: #f0f0f0;
+}
+
+/* ===== Emergency Section ===== */
+.emergency-section {
+  margin: 60px auto;
+  padding: 40px;
+  max-width: 800px;
+  text-align: center;
+  background: #ffe5e5;
+  border: 2px solid #ff4d4d;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.emergency-section h2 {
+  color: #b30000;
+  margin-bottom: 15px;
+}
+
+.emergency-section p {
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.btn-emergency-large {
+  background-color: #e60000;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-emergency-large:hover {
+  background-color: #b30000;
+}
+
+/* ===== Emergency Page ===== */
+.emergency-page {
+  padding: 40px;
+  text-align: center;
+}
+
+.emergency-hero {
+  background: linear-gradient(135deg, #ff4d4d, #b30000);
+  color: #fff;
+  padding: 50px 20px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+  animation: pulse 2s infinite;
+}
+
+.emergency-hero h2 {
+  font-size: 2.2em;
+  margin-bottom: 15px;
+}
+
+.emergency-hero p {
+  font-size: 18px;
+  margin-bottom: 25px;
+}
+
+.btn-emergency-call {
+  background: #fff;
+  color: #b30000;
+  padding: 14px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-emergency-call:hover {
+  background: #ffcccc;
+}
+
+/* Emergency Options */
+.emergency-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.card {
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.red-card {
+  background: #ffe5e5;
+  border: 2px solid #ff4d4d;
+}
+
+.white-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
+.card h3 {
+  margin-bottom: 12px;
+  color: #b30000;
+}
+
+.card p {
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.btn-small {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  background: #e60000;
+  color: #fff;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-small:hover {
+  background: #b30000;
+}
+
+/* Pulse animation for hero */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255,0,0,0.6); }
+  70% { box-shadow: 0 0 20px 20px rgba(255,0,0,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,0,0,0); }
+}
+
+/* ===== Quote Box Styling ===== */
+.quote-box {
+  display: inline-block;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 25px 30px;
+  border-radius: 15px;
+  border: 2px solid rgba(255,255,255,0.8);
+  background: url("https://img.freepik.com/free-vector/medical-healthcare-background-blue-color_1017-26807.jpg") center/cover no-repeat;
+  color: #fff;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add subtle overlay for better text readability */
+.quote-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  border-radius: 15px;
+}
+
+.quote-box h2,
+.quote-box p {
+  position: relative;
+  z-index: 2;
+}
+
+.quote-box h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.quote-box p {
+  font-size: 1em;
+  opacity: 0.9;
+}
+
+.hero-text h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+    transition: opacity 1s ease, transform 1s ease;
+    opacity: 1;
+}
+/* Dropdown container */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown button (Log in) */
+.dropbtn {
+  background: white;
+  color: black;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+.dropbtn:hover {
+  background: #f1f1f1;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: white;
+  min-width: 180px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* Links inside dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s ease;
+}
+
+.dropdown-content a:hover {
+  background: #f5f5f5;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* ---------------- TOP RIGHT OPTIONS ---------------- */
+.top-right-options {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Emergency button (red) */
+.emergency-btn {
+  background: red;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.emergency-btn:hover {
+  background: darkred;
+}
+
+/* Register button (white) */
+.register-btn {
+  background: white;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.register-btn:hover {
+  background: #f1f1f1;
+}
+/* ---------------- TOP RIGHT OPTIONS ---------------- */
+.top-right-options {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Emergency button (red) */
+.emergency-btn {
+  background: red;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.emergency-btn:hover {
+  background: darkred;
+}
+
+/* Login & Register buttons (same white style) */
+.login-btn,
+.register-btn {
+  background: white;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.login-btn:hover,
+.register-btn:hover {
+  background: #f1f1f1;
+  transform: translateY(-2px);
+}
+
+#chatbot-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #0f62fe;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1001;
+}

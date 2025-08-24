@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Portal - MedConnect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="doctor-portal">
+    <div class="container">
+        <header>
+            <div class="logo">MediEase</div>
+            <p class="tagline">Doctor Portal</p>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </header>
+
+        <div class="form-container">
+            <!-- Doctor Sign Up Form -->
+            <form id="doctorSignupForm" class="form">
+                <h2>Doctor Registration</h2>
+                <div class="form-group">
+                    <label for="doctorName">Full Name</label>
+                    <input type="text" id="doctorName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctorEmail">Email</label>
+                    <input type="email" id="doctorEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctorPassword">Password</label>
+                    <input type="password" id="doctorPassword" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctorLicense">Medical License Number</label>
+                    <input type="text" id="doctorLicense" name="license" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctorSpecialty">Specialty</label>
+                    <select id="doctorSpecialty" name="specialty" required>
+                        <option value="">Select Specialty</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Dermatology">Dermatology</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="doctorHospital">Hospital/Clinic</label>
+                    <input type="text" id="doctorHospital" name="hospital" required>
+                </div>
+                <button type="submit" class="submit-btn">Register</button>
+                <p class="form-switch">Already have an account? <a href="#" id="doctorToLogin">Sign In</a></p>
+            </form>
+
+            <!-- Doctor Sign In Form -->
+            <form id="doctorLoginForm" class="form active">
+                <h2>Doctor Sign In</h2>
+                <div class="form-group">
+                    <label for="doctorLoginEmail">Email</label>
+                    <input type="email" id="doctorLoginEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctorLoginPassword">Password</label>
+                    <input type="password" id="doctorLoginPassword" name="password" required>
+                </div>
+                <button type="submit" class="submit-btn">Sign In</button>
+                <p class="form-switch">Don't have an account? <a href="#" id="doctorToSignup">Register</a></p>
+            </form>
+        </div>
+
+        <div class="notification" id="notification"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
