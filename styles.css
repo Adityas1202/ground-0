@@ -1,4 +1,3 @@
-
 :root {
     --primary: #2a7cc7;
     --secondary: #1c3fa9;
@@ -299,11 +298,4 @@ footer a:hover {
         display: inline-block;
         margin-bottom: 20px;
     }
-}
-
-
-
-.logo img {
-    width: 150px;
-    height: 200px;
 }

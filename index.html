@@ -3,126 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="logo.ico">
-    <title>MedSupport - Home</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style_cb.css">
-
-
+    <title>MedConnect - Medical Portal</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1 style="font-family: 'Segoe UI', sans-serif;">MediEase</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="test-booking.html">Book a Test</a></li>
-                <li><a href="appointments.html">Appointments</a></li>
-                <li><a href="other-services.html">Other Services</a></li>
-                <li><a href="data-manager.html">Data Manager</a></li>
-            </ul>
-        </nav>
-        <!-- ✅ New Top Right Options -->
-    <div class="top-right-options">
-    <a href="emergency.html" class="emergency-btn">Emergency</a>
-    <div class="dropdown">
-      <button class="dropbtn">Log in</button>
-      <div class="dropdown-content">
-        <a href="patient-signin.html">Login as Patient</a>
-        <a href="doctor-signin.html">Login as Doctor</a>
-      </div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="../logo.svg" alt="MediEase Logo">
+            </div>
+            <p class="tagline">Connecting Patients with Healthcare Professionals</p>
+        </header>
+
+        <div class="role-selection">
+            <h2>I am a...</h2>
+            <div class="role-cards">
+                <div class="role-card" id="patientRole">
+                    <div class="role-icon">👤</div>
+                    <h3>Patient</h3>
+                    <p>Access your medical records, book appointments, and communicate with your doctors.</p>
+                    <a href="patient-signin.html" class="role-btn">Continue as Patient</a>
+                </div>
+                
+                <div class="role-card" id="doctorRole">
+                    <div class="role-icon">👨‍⚕️</div>
+                    <h3>Doctor</h3>
+                    <p>Manage your appointments, access patient records, and provide care remotely.</p>
+                    <a href="doctor-signin.html" class="role-btn">Continue as Doctor</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 MedConnect. All rights reserved.</p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </footer>
     </div>
-    <a href="signin/index.html" class="register-btn">Register</a>
-  </div>
-    </header>
-    <div class="background-slideshow"></div>
-      <section class="hero">
-        <img src="https://media.licdn.com/dms/image/v2/D5612AQF0Jy-4K4TQNw/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1738144065160?e=2147483647&v=beta&t=m2rRydl0Ye9xuySHfJDiMnEG5jue9839ttqUAVQuvc4" alt="Medical Hero Image" id="trans">
-        <section class="hero-text">
-  <div class="quote-box">
-    <h2>Your health, our responsibility.</h2>
-    <p></p>
-  </div>
-</section>
 
-    </section>
-     <section class="emergency-section">
-    <h2>Need Immediate Help?</h2>
-    <p>If you are facing a medical emergency, please click below to get instant support.</p>
-    <a href="emergency.html" class="btn-emergency-large">Go to Emergency</a>
-</section>
-
-
-  
-
-    <section class="features">
-        <div class="card">
-            <img src="https://img.freepik.com/premium-photo/digital-healthcare-network-features-medical-icons-advanced-data-visualization-tools_548264-20693.jpg" alt="Test">
-            <h3>Book Lab Tests</h3>
-            <p>Schedule a test at your nearest diagonostic centre.</p>
-            <a href="test-booking.html" class="btn">Book Now</a>
-        </div>
-        <div class="card">
-            <img src="https://media.istockphoto.com/id/1159312593/photo/eliminating-delays-in-patient-care-with-digital-technology.jpg?s=612x612&w=0&k=20&c=PYFD2vO_kzbqiX37otzv4YgzdOcoAQNMkCyxpk_lAlw=" alt="Doctor">
-            <h3>Doctor Appointments</h3>
-            <p>Schedule an appointment with expert doctors.</p>
-            <a href="appointments.html" class="btn">Find Doctors</a>
-        </div>
-        <div class="card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9x3oLW_vSIP6B7si3mjZesZ5MC5SepjdHyw&s"" alt="Services">
-            <h3>Other Services</h3>
-            <p>Have a look at the other services that we provide.</p>
-            <a href="other-services.html" class="btn">Explore</a>
-        </div>
-    </section>
-    
-
-    
-   
-    <footer>
-        <p>&copy; 2025 MediEase. All rights reserved.</p>
-    </footer>
-
-    <script src="database.js"></script>
-    <script>
-        // Initialize database when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            Database.init();
-        });
-    </script>
     <script src="script.js"></script>
-    <!-- === MedyBuddy Chatbot === -->
-<div id="location-permission" class="hidden">
-  <div class="permission-box">
-  
-    <div class="permission-buttons">
-      <button id="allow-location" class="permission-btn"></button>
-      <button id="deny-location" class="permission-btn"></button>
-    </div>
-  </div>
-</div>
-
-<!-- Floating button -->
-<div id="chat-toggle">
-  <span id="chat-label">Need any help? Ask MedyBuddy</span>
-  <img src="ABC.png" alt="MedyBuddy Logo">
-</div>
-
-<!-- Chat container -->
-<div id="chat-container" class="hidden">
-  <div id="chat-header">
-    <span>💙 MedyBuddy</span>
-  </div>
-  <div id="chat-box"></div>
-  <div id="input-area">
-    <input type="text" id="input" placeholder="Type your message...">
-    <button id="send">➤</button>
-  </div>
-</div>
-<!-- === End Chatbot === -->
-
-<!-- Chatbot Logic -->
-<script src="script_cb.js"></script>
-
 </body>
 </html>
